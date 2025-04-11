@@ -7,17 +7,19 @@ import path from 'node:path';
 import db from './config/connection.js';
 import { authenticateToken } from './services/auth.js';
 
+const app = express();
+const PORT = process.env.PORT || 3001;
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
 // Function to start the Apollo Server
 const startApolloServer = async () => {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-  });
 
   await server.start();
-
-  const app = express();
-  const PORT = process.env.PORT || 3001;
+  await db;
+  
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
